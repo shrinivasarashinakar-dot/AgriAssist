@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-v21=61ui_)z&x^7af4i*xbfy69@5x*12l3m(^$#@)w=)=04fhd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["agri-assist-9t3e.onrender.com"]
+ALLOWED_HOSTS = ["agriassist-9pc8.onrender.com"]
 
 CORS_ALLOWED_ORIGINS = [
     "https://agri-assist-frontend.onrender.com"
