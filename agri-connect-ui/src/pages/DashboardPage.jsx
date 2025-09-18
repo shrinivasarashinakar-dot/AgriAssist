@@ -84,8 +84,7 @@ const DashboardPage = () => {
       <div
         className="absolute inset-0 -z-10 bg-cover bg-center"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1920&auto=format&fit=crop')",
+          backgroundImage: `url(${process.env.PUBLIC_URL + '/images/dashboard-bg.jpg'})`,
         }}
       />
       {/* Animated gradient background */}
