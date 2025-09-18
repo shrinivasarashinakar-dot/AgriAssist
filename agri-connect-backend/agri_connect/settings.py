@@ -29,11 +29,11 @@ DEBUG = True
 ALLOWED_HOSTS = ["agriassist-9pc8.onrender.com"]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://agri-assist-frontend.onrender.com"
+    "https://agriassist-frontend-gm7d.onrender.com"
 ]
 # Trust the frontend origin for CSRF checks when using cookie-based requests
 CSRF_TRUSTED_ORIGINS = [
-    "https://agri-assist-frontend.onrender.com",
+    "https://agriassist-frontend-gm7d.onrender.com",
 ]
 # Application definition
 
