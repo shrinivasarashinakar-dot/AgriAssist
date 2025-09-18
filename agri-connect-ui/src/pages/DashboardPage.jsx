@@ -80,6 +80,14 @@ const DashboardPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+      {/* Agriculture-themed background image */}
+      <div
+        className="absolute inset-0 -z-10 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1920&auto=format&fit=crop')",
+        }}
+      />
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-emerald-50 to-lime-100" />
       {/* Decorative blobs */}
