@@ -98,7 +98,7 @@ const DashboardPage = () => {
         <div className="flex items-center gap-3">
           <GiFarmTractor className="text-green-700 text-3xl" />
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-green-800">Agri Assist</h1>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-green-900 tracking-tight">Agri Connect</h1>
             <p className="text-xs text-green-700/70">Smart tools for modern farming</p>
           </div>
         </div>
@@ -113,14 +113,27 @@ const DashboardPage = () => {
       {/* Welcome and features */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 pb-12">
         {/* Hero */}
-        <div className="mt-4 mb-8 rounded-2xl bg-white/70 backdrop-blur-md shadow-lg border border-green-100 p-6 sm:p-8">
+        <div className="mt-4 mb-8 rounded-2xl bg-white/75 backdrop-blur-md shadow-lg border border-green-100 p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-green-800">
-                👋 Welcome {farmer?.name ? farmer.name : 'Farmer'}
+              <h2 className="text-3xl sm:text-4xl font-black text-green-900 leading-tight">
+                <span className="mr-2">👋</span>
+                <span>Welcome,</span>
+                <span className="ml-2 bg-gradient-to-r from-emerald-600 via-green-600 to-lime-600 bg-clip-text text-transparent drop-shadow-sm">
+                  {farmer?.name ? farmer.name : 'Farmer'}
+                </span>
               </h2>
-              <p className="text-green-700/80 mt-1">
-                {farmer?.location ? `Location: ${farmer.location}` : 'Let’s grow smarter together'}
+              <p className="mt-3 text-sm sm:text-base text-green-800/80">
+                {farmer?.location ? (
+                  <>
+                    Location: {" "}
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-800 border border-green-200">
+                      {farmer.location}
+                    </span>
+                  </>
+                ) : (
+                  'Let’s grow smarter together'
+                )}
               </p>
             </div>
           </div>
