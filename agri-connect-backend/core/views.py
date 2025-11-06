@@ -193,68 +193,74 @@ def _is_agriculture_question(text: str) -> bool:
     ]
     return any(k in t for k in keywords)
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+from google import generativeai as genai
+
+def _is_agriculture_question(q):
+    agri_keywords = [
+        "crop", "soil", "fertilizer", "seed", "irrigation", "farm", "pest",
+        "disease", "weather", "harvest", "agriculture", "agri", "livestock",
+        "market price", "ph", "compost", "organic", "yield", "drought", "rainfall"
+    ]
+    q = q.lower()
+    return any(word in q for word in agri_keywords)
+
 @api_view(['POST'])
 def ask_ai(request):
-    """
-    Agriculture-only AI assistant using Google's Gemini API.
-    Expects JSON: { "question": "..." } and returns { "answer": "..." }.
-    Non-agriculture questions are politely declined.
-    """
     question = (request.data.get('question') or '').strip()
     if not question:
         return Response({"error": "'question' is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Off-topic guard
+    # Agriculture-only filter
     if not _is_agriculture_question(question):
         return Response({
             "answer": (
-                "I can help with agriculture-related queries only (e.g., crops, soil, irrigation, "
-                "pests/diseases, fertilizers, weather for farming, livestock, and market prices). "
-                "Please rephrase your question to focus on agriculture."
+                "I can answer only agriculture-related questions — crops, fertilizers, irrigation, "
+                "pests, soil, livestock, and market prices. Please ask a farming-related question."
             )
-        }, status=status.HTTP_200_OK)
+        })
 
     api_key = getattr(settings, 'GOOGLE_API_KEY', '')
     if not api_key:
-        return Response({"error": "GOOGLE_API_KEY is not configured on the server"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": "GOOGLE_API_KEY is not configured"}, status=500)
 
     try:
         genai.configure(api_key=api_key)
 
-        system_instruction = (
-            "You are AgriAssist, an expert agriculture assistant for farmers. "
-            "Only answer agriculture-related questions: crops, varieties, sowing, soil health, "
-            "irrigation, fertilizers (NPK schedules), plant protection (pests, diseases, IPM), "
-            "harvesting, post-harvest, livestock care, weather advisories for farming, and market prices. "
-            "If a question is not agriculture-related, politely refuse and ask the user to ask an agriculture question. "
-            "Keep answers concise, practical, and safe. Avoid medical/legal/financial advice."
-        )
+        system_instruction = """
+        You are AgriAssist, an agriculture expert. Provide farming guidance only.
+        Focus on crops, soil, fertilizers, irrigation, pests, diseases, livestock and climate advice.
+        If question is not related to agriculture, politely refuse.
+        Keep answers practical for farmers.
+        """
 
         model = genai.GenerativeModel(
-            model_name='gemini-1.5-flash',
-            system_instruction=system_instruction,
-            generation_config={
-                'temperature': 0.4,
-                'top_p': 0.9,
-                'max_output_tokens': 800,
-            },
-            safety_settings={
-                # Use default safety, can be extended if needed
-            }
-        )
+    model_name="gemini-2.5-flash",
+    system_instruction=system_instruction,
+    generation_config={
+        "temperature": 0.4,
+        "top_p": 0.9,
+        "max_output_tokens": 800,
+    }
+)
 
-        prompt = question
-        gemini_response = model.generate_content(prompt)
-        answer_text = getattr(gemini_response, 'text', None) or ''
-        if not answer_text and hasattr(gemini_response, 'candidates'):
-            try:
-                answer_text = gemini_response.candidates[0].content.parts[0].text
-            except Exception:
-                answer_text = ''
 
-        if not answer_text:
-            answer_text = "Sorry, I couldn't generate a helpful agriculture-specific answer. Please try rephrasing."
+        response = model.generate_content(question)
 
-        return Response({"answer": answer_text})
+        # Extract answer text safely
+        answer = ""
+        if hasattr(response, "text"):
+            answer = response.text
+        elif hasattr(response, "candidates") and response.candidates:
+            answer = response.candidates[0].content.parts[0].text
+
+        if not answer:
+            answer = "Sorry, I couldn't generate a helpful agriculture answer. Try rephrasing."
+
+        return Response({"answer": answer})
+
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": str(e)}, status=500)

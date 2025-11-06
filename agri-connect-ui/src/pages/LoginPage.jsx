@@ -51,7 +51,7 @@ const LoginPage = () => {
         {/* Left hero text */}
         <div className="text-white px-2 md:px-0 md:w-1/2">
           <p className="uppercase tracking-widest text-emerald-300/90 text-sm mb-3">Agriculture</p>
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">AGRIC CONNECT</h1>
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">AGRI CONNECT</h1>
           <p className="mt-4 text-slate-100/90 max-w-md">
             Connect with the farming community. Get prices, advice, tips, and marketplace — all in one place.
           </p>

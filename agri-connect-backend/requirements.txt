@@ -48,7 +48,6 @@ tzdata==2025.2
 uritemplate==4.2.0
 urllib3==2.5.0
 whitenoise==6.9.0
-(venv) PS D:\VsCode Projects\AgriAssistGrp\AgriAssist\agri-connect-backend> type requirements.txt
 asgiref==3.9.1
 Django==5.2.4
 django-cors-headers==4.7.0
